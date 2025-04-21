@@ -29,3 +29,8 @@ export async function POST(req: Request) {
 export async function GET() {
   return NextResponse.json({ message: "Hello, Testing Book API route" });
 }
+
+export async function DELETE() {
+  bookings.length = 0;
+  return NextResponse.json({ success: true, message: "All bookings cleared." });
+}

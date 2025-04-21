@@ -26,6 +26,10 @@ export default function EventsPage() {
   }, [dispatch]);
 
   useEffect(() => {
+    fetch("/api/book", { method: "DELETE" });
+  }, []);
+
+  useEffect(() => {
     localStorage.setItem("bookings", JSON.stringify(bookings));
   }, [bookings]);
 
