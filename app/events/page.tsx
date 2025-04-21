@@ -3,7 +3,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { RootState } from "@/store/store";
-import { addBooking } from "@/store/slices/bookingSlice";
+import { addBooking, clearBookings } from "@/store/slices/bookingSlice";
 import { events as allEvents } from "@/data/data";
 import { getRemainingSpots } from "@/utils/bookingUtils";
 import { EventCard } from "@/components/EventCard";
@@ -15,9 +15,19 @@ export default function EventsPage() {
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredEvents = allEvents.filter((event) =>
-    event.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  useEffect(() => {
+    const stored = localStorage.getItem("bookings");
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      parsed.forEach((b: { userId: number; eventId: number }) =>
+        dispatch(addBooking(b))
+      );
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    localStorage.setItem("bookings", JSON.stringify(bookings));
+  }, [bookings]);
 
   const handleBook = async (eventId: number) => {
     const userId = 1;
@@ -38,11 +48,32 @@ export default function EventsPage() {
     }
   };
 
+  const handleClear = () => {
+    localStorage.removeItem("bookings");
+    dispatch(clearBookings());
+    toast.success("All bookings cleared!");
+  };
+
+  const filteredEvents = allEvents.filter((event) =>
+    event.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="p-6 max-w-7xl mx-auto">
-      <h1 className="text-4xl font-bold mb-6 text-center">Explore Events</h1>
-      <div className="mb-6">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-4xl font-bold text-center w-full">
+          Explore Events
+        </h1>
+      </div>
+
+      <div className="mb-6 flex justify-end">
         <SearchBar value={searchQuery} onChange={setSearchQuery} />
+        <button
+          onClick={handleClear}
+          className="ml-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
+        >
+          Clear Bookings
+        </button>
       </div>
 
       {filteredEvents.length ? (

@@ -12,7 +12,7 @@ export const SearchBar = ({ value, onChange }: SearchBarProps) => {
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder="Search events..."
-      className="w-full p-2 border rounded"
+      className="w-1/4 p-2 border rounded-lg"
     />
   );
 };

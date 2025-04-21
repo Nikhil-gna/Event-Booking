@@ -11,7 +11,7 @@ interface Props {
 
 export const EventCard = ({ event, isBooked, remaining, onBook }: Props) => {
   return (
-    <div className="border border-gray-200 p-5 rounded-2xl shadow-sm bg-white hover:shadow-lg transition-shadow duration-200">
+    <div className="border border-gray-200 p-5 rounded-2xl shadow-sm bg-gray-200 hover:shadow-lg transition-shadow duration-200">
       <h2 className="text-2xl font-semibold text-gray-800 mb-2">
         {event.title}
       </h2>
